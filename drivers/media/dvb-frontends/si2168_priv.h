@@ -27,6 +27,7 @@ struct si2168_dev {
 	struct dvb_frontend fe;
 	enum fe_delivery_system delivery_system;
 	enum fe_status fe_status;
+	u8 stat_resp;
 	#define SI2168_CHIP_ID_A20 ('A' << 24 | 68 << 16 | '2' << 8 | '0' << 0)
 	#define SI2168_CHIP_ID_A30 ('A' << 24 | 68 << 16 | '3' << 8 | '0' << 0)
 	#define SI2168_CHIP_ID_B40 ('B' << 24 | 68 << 16 | '4' << 8 | '0' << 0)
@@ -35,6 +36,10 @@ struct si2168_dev {
 	unsigned int version;
 	const char *firmware_name;
 	u8 ts_mode;
+	int fef_pin;
+	bool fef_inv;
+	int agc_pin;
+	bool agc_inv;
 	unsigned int active:1;
 	unsigned int warm:1;
 	unsigned int ts_clock_inv:1;

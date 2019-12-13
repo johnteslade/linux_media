@@ -1819,7 +1819,15 @@ static int dtv_property_process_set(struct dvb_frontend *fe,
 		dev_dbg(fe->dvb->device,
 			"%s: SET cmd 0x%08x (%s) to 0x%08x\n",
 			__func__, cmd, dtv_cmds[cmd].name, data);
-	switch (cmd) {
+
+	/* Allow the frontend to validate incoming properties */
+	if (fe->ops.set_property) {
+		r = fe->ops.set_property(fe, cmd, data);
+		if (r < 0)
+			return r;
+	}
+
+	switch(cmd) {
 	case DTV_CLEAR:
 		/*
 		 * Reset a cache of data specific to the frontend here. This does
@@ -2398,6 +2406,58 @@ static int dvb_frontend_handle_ioctl(struct file *file,
 	dev_dbg(fe->dvb->device, "%s:\n", __func__);
 
 	switch (cmd) {
+
+	case FE_ECP3FW_READ:
+		//printk("FE_ECP3FW_READ *****************");
+		if (fe->ops.spi_read) {
+			struct ecp3_info *info = parg;	
+			fe->ops.spi_read(fe, info);
+		}
+		err = 0;
+		break;
+	case FE_ECP3FW_WRITE:
+		//printk("FE_ECP3FW_WRITE *****************");
+		if (fe->ops.spi_write) {
+			struct ecp3_info *info = parg;	
+			fe->ops.spi_write(fe, info);
+		
+		}
+		err = 0;
+		break;
+
+	case FE_24CXX_READ:
+		//printk("FE_24CXX_READ *****************");
+		if (fe->ops.mcu_read) {
+			struct mcu24cxx_info *info = parg;	
+			fe->ops.mcu_read(fe, info);
+		}
+		err = 0;
+		break;
+	case FE_24CXX_WRITE:
+		//printk("FE_24CXX_WRITE *****************");
+		if (fe->ops.mcu_write) {
+			struct mcu24cxx_info *info = parg;	
+			fe->ops.mcu_write(fe, info);
+		
+		}
+		err = 0;
+		break;
+	case FE_REGI2C_READ:
+		if (fe->ops.mcu_read) {
+			struct usbi2c_access *info = parg;	
+			fe->ops.reg_i2cread(fe, info);
+		}
+		err = 0;
+		break;
+	case FE_REGI2C_WRITE:
+		if (fe->ops.mcu_write) {
+			struct usbi2c_access *info = parg;	
+			fe->ops.reg_i2cwrite(fe, info);
+		
+		}
+		err = 0;
+		break;
+
 	case FE_SET_PROPERTY: {
 		struct dtv_properties *tvps = parg;
 		struct dtv_property *tvp = NULL;

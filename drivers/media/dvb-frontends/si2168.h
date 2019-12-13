@@ -42,6 +42,16 @@ struct si2168_config {
 #define SI2168_TS_CLK_MANUAL	0x20
 	u8 ts_mode;
 
+	/* Tuner control pins */
+#define SI2168_MP_NOT_USED	1
+#define SI2168_MP_A		2
+#define SI2168_MP_B		3
+#define SI2168_MP_C		4
+#define SI2168_MP_D		5
+	int agc_pin;
+	bool agc_inv;
+	int fef_pin;
+	bool fef_inv;
 	/* Flags */
 	unsigned int ts_clock_inv:1;
 	unsigned int ts_clock_gapped:1;

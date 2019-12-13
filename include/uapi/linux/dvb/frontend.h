@@ -69,6 +69,7 @@
  *					automatically
  * @FE_CAN_MUTE_TS:			Can stop spurious TS data output
  */
+
 enum fe_caps {
 	FE_IS_STUPID			= 0,
 	FE_CAN_INVERSION_AUTO		= 0x1,
@@ -313,6 +314,8 @@ enum fe_code_rate {
 	FEC_3_5,
 	FEC_9_10,
 	FEC_2_5,
+	FEC_1_4,
+	FEC_1_3,  
 };
 
 /**
@@ -350,6 +353,19 @@ enum fe_modulation {
 	APSK_32,
 	DQPSK,
 	QAM_4_NR,
+	QAM_512,
+	QAM_1024,
+	QAM_4096,
+	APSK_64,
+	APSK_128,
+	APSK_256,
+	APSK_8L,
+	APSK_16L,
+	APSK_32L,
+	APSK_64L,
+	APSK_128L,
+	APSK_256L,
+	APSK_1024,
 };
 
 /**
@@ -581,6 +597,9 @@ enum fe_rolloff {
 	ROLLOFF_20,
 	ROLLOFF_25,
 	ROLLOFF_AUTO,
+	ROLLOFF_15,
+	ROLLOFF_10,
+	ROLLOFF_5,
 };
 
 /**
@@ -645,6 +664,7 @@ enum fe_delivery_system {
 	SYS_DVBT2,
 	SYS_TURBO,
 	SYS_DVBC_ANNEX_C,
+	SYS_DVBC2,
 };
 
 /* backward compatibility definitions for delivery systems */
@@ -1008,4 +1028,34 @@ struct dvb_frontend_event {
 
 #endif
 
-#endif /*_DVBFRONTEND_H_*/
+struct ecp3_info
+{
+	__u8 reg;
+	__u32 data;
+};
+
+struct mcu24cxx_info
+{
+	__u32 bassaddr;
+	__u8 reg;
+	__u32 data;
+};
+
+struct usbi2c_access
+{
+	__u8 chip_addr;
+	__u8 reg;
+	__u8 num;
+	__u8 buf[8];
+};
+
+#define FE_ECP3FW_READ    _IOR('o', 90, struct ecp3_info)
+#define FE_ECP3FW_WRITE   _IOW('o', 91, struct ecp3_info)
+
+#define FE_24CXX_READ    _IOR('o', 92, struct mcu24cxx_info)
+#define FE_24CXX_WRITE   _IOW('o', 93, struct mcu24cxx_info)
+
+#define FE_REGI2C_READ    _IOR('o', 94, struct usbi2c_access)
+#define FE_REGI2C_WRITE   _IOW('o', 95, struct usbi2c_access)
+
+#endif /* _DVBFRONTEND_H_ */

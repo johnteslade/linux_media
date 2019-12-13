@@ -182,6 +182,9 @@ enum mceusb_model_type {
 	HAUPPAUGE_CX_HYBRID_TV,
 	EVROMEDIA_FULL_HYBRID_FULLHD,
 	ASTROMETA_T2HYBRID,
+	CX231XX_TBS5280,
+        CX231XX_TBS5281,
+        CX231XX_TBS5990,
 };
 
 struct mceusb_model {
@@ -276,7 +279,19 @@ static const struct mceusb_model mceusb_model[] = {
 		.name = "Astrometa T2Hybrid",
 		.no_tx = 1,
 		.rc_map = RC_MAP_ASTROMETA_T2HYBRID,
-	}
+	},
+	[CX231XX_TBS5280] = {
+		.rc_map = RC_MAP_RC6_MCE,
+		.name = "TurboSight TBS 5280",
+	},
+        [CX231XX_TBS5281] = {
+                .rc_map = RC_MAP_RC6_MCE,
+                .name = "TurboSight TBS 5281",
+        },
+        [CX231XX_TBS5990] = {
+                .rc_map = RC_MAP_RC6_MCE,
+                .name = "TurboSight TBS 5990",
+        },
 };
 
 static const struct usb_device_id mceusb_dev_table[] = {
@@ -443,7 +458,15 @@ static const struct usb_device_id mceusb_dev_table[] = {
 	/* Astrometa T2hybrid */
 	{ USB_DEVICE(0x15f4, 0x0135),
 	  .driver_info = ASTROMETA_T2HYBRID },
-
+        /* TurboSight TBS 5280 IR */
+        { USB_DEVICE(0x734c, 0x5280),
+          .driver_info = CX231XX_TBS5280 },
+        /* TurboSight TBS 5281 IR */
+        { USB_DEVICE(0x734c, 0x5281),
+          .driver_info = CX231XX_TBS5281 },
+        /* TurboSight TBS 5990 IR */
+        { USB_DEVICE(0x734c, 0x5990),
+          .driver_info = CX231XX_TBS5990 },
 	/* Terminating entry */
 	{ }
 };
